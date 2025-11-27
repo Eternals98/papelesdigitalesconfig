@@ -75,8 +75,15 @@ input[type="file"] > input[type="button"]::-moz-focus-inner
 .yui-overlay a:visited,
 .yui-overlay a:hover
 {
-   color: #000;
+   color: #1f75d7;
    text-decoration: none;
+}
+
+.sticky-wrapper a:hover,
+.sticky-footer a:hover,
+.yui-overlay a:hover
+{
+   text-decoration: underline;
 }
 
 /*#bd a:hover
@@ -1285,7 +1292,7 @@ a.theme-color-1,
 a.theme-color-1:visited,
 a.theme-color-1:hover
 {
-   color: #333;
+   color: #1f75d7;
 }
 
 .theme-color-2,
@@ -1293,7 +1300,7 @@ a.theme-color-2,
 a.theme-color-2:visited,
 a.theme-color-2:hover
 {
-   color: #333;
+   color: #144a96;
 }
 
 .theme-color-3,
@@ -1301,7 +1308,7 @@ a.theme-color-3,
 a.theme-color-3:visited,
 a.theme-color-3:hover
 {
-   color: #333;
+   color: #0f356c;
 }
 
 .theme-color-4,
@@ -1309,7 +1316,7 @@ a.theme-color-4,
 a.theme-color-4:visited,
 a.theme-color-4:hover
 {
-   color: #333;
+   color: #082246;
 }
 
 .theme-color-5,
@@ -1317,7 +1324,7 @@ a.theme-color-5,
 a.theme-color-5:visited,
 a.theme-color-5:hover
 {
-   color: #ccc;
+   color: #c6d4f0;
 }
 
 /* Theme background colors */
