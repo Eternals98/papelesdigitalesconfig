@@ -60,19 +60,19 @@ padding: 0;
 width: 100%;
 }
 .yui-skin-standardTheme .yui-ac-content li {
-margin: 0;
-padding: 2px 5px;
-cursor: default;
+    margin: 0;
+    padding: 2px 5px;
+    cursor: default;
 white-space: nowrap;
 list-style: none;
 zoom: 1;
 }
 .yui-skin-standardTheme .yui-ac-content li.yui-ac-prehighlight {
-background: #B3D4FF;
+    background: #d6e6fb;
 }
 .yui-skin-standardTheme .yui-ac-content li.yui-ac-highlight {
-background: #426FD9;
-color: #FFF;
+    background: #1f75d7;
+    color: #FFF;
 }
 .yui-button {
 display: -moz-inline-box;
@@ -98,19 +98,21 @@ text-decoration: none;
 margin: auto .25em;
 }
 .yui-skin-standardTheme .yui-button .first-child {
-border-radius: 3px;
-border-width: 1px;
-border-style: solid;
-border-color: #0C79BF;
-margin: 0;
-_margin: 0;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #1f75d7;
+    margin: 0;
+    _margin: 0;
+    box-shadow: 0 1px 2px rgba(18, 77, 168, 0.35);
 }
 .yui-skin-standardTheme .alf-primary-button.yui-button button,
 .yui-skin-standardTheme .alf-primary-button.yui-button a
 {
-color: white;
-background-color: #0C79BF;
-border-radius: 1px;
+    color: white;
+    background-color: #1f75d7;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px rgba(18, 77, 168, 0.35);
 }
 .yui-skin-standardTheme .yui-button button,
 .yui-skin-standardTheme .yui-button a {
@@ -118,7 +120,7 @@ padding: 0 10px;
 -font-size: 93%;
 line-height: 2;*line-height:1.7;
 min-height: 2em;*min-height:auto;
-color: #0C79BF;
+    color: #1f75d7;
 }
 .yui-skin-standardTheme .yui-button a {*line-height:1.875;*padding-bottom:1px;
 }
@@ -132,21 +134,21 @@ color: #000;
 background-image: url(split-button-arrow.png);
 }
 .yui-skin-standardTheme .yui-button-focus {
-border-color: #135FA3;
-background-position: 0 -1300px;
+    border-color: #1662b3;
+    background-position: 0 -1300px;
 }
 .yui-skin-standardTheme .yui-button-focus .first-child {
-border-color: #135FA3;
+    border-color: #1662b3;
 }
 .yui-skin-standardTheme .alf-primary-button.yui-button-focus button,
 .yui-skin-standardTheme .alf-primary-button.yui-button-focus a,
 .yui-skin-standardTheme .alf-primary-button.yui-button a:focus
 {
-background-color: #135FA3;
+    background-color: #1662b3;
 }
 .yui-skin-standardTheme .yui-button-focus button,
 .yui-skin-standardTheme .yui-button-focus a {
-color: #135FA3;
+    color: #1662b3;
 }
 .yui-skin-standardTheme .yui-menu-button-focus button,
 .yui-skin-standardTheme .yui-menu-button-focus a {
@@ -156,24 +158,24 @@ color: #000;
 background-image: url(split-button-arrow-focus.png);
 }
 .yui-skin-standardTheme .yui-button-hover {
-border-color: #135FA3;
-background-position: 0 -1300px;
+    border-color: #2f8df3;
+    background-position: 0 -1300px;
 }
 .yui-skin-standardTheme .yui-button-hover .first-child {
-border-color: #135FA3;
+    border-color: #2f8df3;
 }
 .yui-skin-standardTheme .alf-primary-button.yui-button-hover button,
 .yui-skin-standardTheme .alf-primary-button.yui-button-hover a,
 .yui-skin-standardTheme .alf-primary-button.yui-button a:hover
 {
-background-color: #135FA3;
-color: white;
+    background-color: #2f8df3;
+    color: white;
 }
 .yui-skin-standardTheme .yui-button-hover button,
 .yui-skin-standardTheme .yui-button-hover a,
 .yui-skin-standardTheme .yui-link-button-hover a,
 .yui-skin-standardTheme .yui-link-button-hover a:hover {
-color: #135FA3;
+    color: #2f8df3;
 }
 .yui-skin-standardTheme .yui-split-button-hover button,
 .yui-skin-standardTheme .yui-split-button-hover a,
@@ -187,24 +189,24 @@ color: #000;
 background-image: url(split-button-arrow-hover.png);
 }
 .yui-skin-standardTheme .yui-button-active {
-border-color: #125380;
-background-position: 0 -1700px;
+    border-color: #144a96;
+    background-position: 0 -1700px;
 }
 .yui-skin-standardTheme .yui-button-active .first-child {
-border-color: #125380;
+    border-color: #144a96;
 }
 .yui-skin-standardTheme .alf-primary-button.yui-button-active button,
 .yui-skin-standardTheme .alf-primary-button.yui-button-active a,
 .yui-skin-standardTheme .alf-primary-button.yui-button a:active
 {
-background-color: #125380;
-color: white;
+    background-color: #144a96;
+    color: white;
 }
 .yui-skin-standardTheme .yui-button-active button,
 .yui-skin-standardTheme .yui-button-active a,
 .yui-skin-standardTheme .yui-link-button-active a,
 .yui-skin-standardTheme .yui-link-button-active a:hover {
-color: #125380;
+    color: #144a96;
 }
 .yui-skin-standardTheme .yui-menu-button-active button,
 .yui-skin-standardTheme .yui-menu-button-active a {
@@ -249,8 +251,8 @@ background-color: transparent;
 .yui-skin-standardTheme .alf-primary-button.yui-button-disabled a,
 .yui-skin-standardTheme .alf-primary-button.yui-button a:disabled
 {
-color: #A6A6A6;
-cursor: default;
+    color: #8fa2c4;
+    cursor: default;
 }
 /*.yui-skin-standardTheme .yui-menu-button-disabled button {
 background-image: url(menu-button-arrow-disabled.png);
@@ -1045,7 +1047,7 @@ font-weight: bold;
 background-position: 0 -1400px;
 }
 .yui-skin-standardTheme .yui-dialog .bdft button {
-color: #0C79BF;
+    color: #0b87a9;
 }
 .yui-skin-standardTheme .yui-dialog .bdft .alf-primary-button button,
 .yui-skin-standardTheme .yui-dialog .bdft .alf-primary-button a
@@ -4774,10 +4776,119 @@ width: 140px;
 border: none;
 }
 .ygtv-edit-DateNode .ygtvok {
-display: none;
+    display: none;
 }
 .ygtv-edit-DateNode .ygtv-button-container {
-text-align: right;
-margin: auto;
+    text-align: right;
+    margin: auto;
+}
+
+/*
+ * Modern palette refresh for the standardTheme skin
+ * Palette inspired by the requested Coolors gradient:
+ * - Mist (bg subtle): #d6e1e3
+ * - Soft teal: #b5d4d9
+ * - Light aqua: #8fcfd9
+ * - Vivid aqua: #71c4cd
+ * - Primary teal: #0b87a9
+ * - Deep midnight: #01354f
+ */
+
+.yui-skin-standardTheme {
+    background-color: #d6e1e3;
+    color: #0f2a3a;
+}
+
+.yui-skin-standardTheme a {
+    color: #0b87a9;
+}
+
+.yui-skin-standardTheme a:hover,
+.yui-skin-standardTheme a:focus {
+    color: #01354f;
+}
+
+.yui-skin-standardTheme .yui-panel,
+.yui-skin-standardTheme .yui-panel .bd,
+.yui-skin-standardTheme .yui-ac-content,
+.yui-skin-standardTheme .yuimenu .bd,
+.yui-skin-standardTheme .yui-calendar,
+.yui-skin-standardTheme .yui-dt table,
+.yui-skin-standardTheme .ygtv-label-editor {
+    background: #f7fbfc;
+    border-color: #aacfd5;
+}
+
+.yui-skin-standardTheme .yui-ac-content,
+.yui-skin-standardTheme .yui-dt table {
+    box-shadow: 0 8px 22px rgba(1, 53, 79, 0.12);
+}
+
+.yui-skin-standardTheme .yui-dt th {
+    background: linear-gradient(180deg, #b5d4d9 0%, #8fcfd9 100%);
+    color: #01354f;
+    border-right-color: #d6e1e3;
+}
+
+.yui-skin-standardTheme .yui-dt tr.yui-dt-odd td {
+    background-color: #f4f9fa;
+}
+
+.yui-skin-standardTheme .yui-dt tr.yui-dt-even td {
+    background-color: #eef5f6;
+}
+
+.yui-skin-standardTheme .yui-button .first-child {
+    background: linear-gradient(135deg, #71c4cd 0%, #0b87a9 100%);
+    color: #0f2a3a;
+    box-shadow: 0 6px 16px rgba(1, 53, 79, 0.18);
+    transition: background-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.yui-skin-standardTheme .alf-primary-button.yui-button .first-child,
+.yui-skin-standardTheme .alf-primary-button.yui-button button,
+.yui-skin-standardTheme .alf-primary-button.yui-button a {
+    color: #f7fbfc;
+    text-shadow: none;
+}
+
+.yui-skin-standardTheme .yui-button-hover .first-child {
+    background: linear-gradient(135deg, #8fcfd9 0%, #13a9c7 100%);
+    box-shadow: 0 10px 26px rgba(1, 53, 79, 0.22);
+    transform: translateY(-1px);
+}
+
+.yui-skin-standardTheme .yui-button-focus .first-child,
+.yui-skin-standardTheme .yui-button-active .first-child {
+    background: #0b87a9;
+    color: #f7fbfc;
+    border-color: #01354f;
+}
+
+.yui-skin-standardTheme .yui-button-disabled .first-child {
+    background: #aacfd5;
+    border-color: #aacfd5;
+    color: #ffffff;
+    box-shadow: none;
+    opacity: 0.65;
+}
+
+.yui-skin-standardTheme .yui-dialog .hd,
+.yui-skin-standardTheme .yui-panel .hd,
+.yui-skin-standardTheme .yuimenubar .bd {
+    background: linear-gradient(90deg, #01354f 0%, #0b87a9 100%);
+    color: #f7fbfc;
+}
+
+.yui-skin-standardTheme .ygtvfocus {
+    background-color: #b5d4d9;
+    border: none;
+}
+
+.yui-skin-standardTheme .ygtvfocus .ygtvlabel,
+.yui-skin-standardTheme .ygtvfocus .ygtvlabel:link,
+.yui-skin-standardTheme .ygtvfocus .ygtvlabel:visited,
+.yui-skin-standardTheme .ygtvfocus .ygtvlabel:hover {
+    background-color: #b5d4d9;
 }
 
