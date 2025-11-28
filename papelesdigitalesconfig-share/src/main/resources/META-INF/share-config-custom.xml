@@ -10,6 +10,27 @@
              alfresco/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml
      -->
 <alfresco-config>
+    <config evaluator="string-compare" condition="WebFramework">
+        <web-framework>
+
+            <defaults>
+                <page-type>
+                    <id>login</id>
+                    <page-instance-id>redsis-login</page-instance-id>
+                </page-type>
+            </defaults>
+        </web-framework>
+    </config>
+
+    <alfresco-config>
+        <config evaluator="string-compare" condition="Share">
+            <client>
+                <dependencies>
+                    <js src="/res/themes/standardTheme/yui/assets/favicon-loader.js" />
+                </dependencies>
+            </client>
+        </config>
+    </alfresco-config>
     <!--================================================================================================================
         Make custom types and aspects visible in "Change Type" and "Manage Aspects" actions.
          This will also make them visible when creating rules.
@@ -29,10 +50,42 @@
         <types>
             <!-- Define the ACME base doc type as decedent from cm:content -->
             <type name="cm:content">
-                <subtype name="acme:document"/>
+                <subtype name="redsis:papelesdigitales" />
+                <subtype name="redsis:factura" />
+                <subtype name="redsis:soporte" />
+                <subtype name="redsis:notaCredito" />
+                <subtype name="redsis:notaDebito" />
             </type>
         </types>
     </config>
+
+    <!-- ===================================================================== -->
+    <!-- Formulario para el aspecto redsis:consecutivoCxP                      -->
+    <!-- ===================================================================== -->
+    <config evaluator="aspect" condition="redsis:consecutivoCxP">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="redsis:incrementFacturaID" />
+                    <show id="redsis:incrementNotaCreditoID" />
+                    <show id="redsis:incrementNotaDebitoID" />
+                    <show id="redsis:incrementSoporteID" />
+                </field-visibility>
+                <appearance>
+                    <set id="redsis_consecutivoCxP_set0"
+                         appearance="whitespace"
+                         template="/org/alfresco/components/form/3-column-set.ftl"
+                         label-id="form.set.redsis_consecutivoCxP" />
+
+                    <field id="redsis:incrementFacturaID" set="redsis_consecutivoCxP_set0" />
+                    <field id="redsis:incrementNotaCreditoID" set="redsis_consecutivoCxP_set0" />
+                    <field id="redsis:incrementNotaDebitoID" set="redsis_consecutivoCxP_set0" />
+                    <field id="redsis:incrementSoporteID" set="redsis_consecutivoCxP_set0" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 
     <!--================================================================================================================
           Advanced Search Forms for types
@@ -42,15 +95,22 @@
     <config evaluator="string-compare" condition="AdvancedSearch" replace="true">
         <advanced-search>
             <forms>
-                <!-- Standard out-of-the-box types -->
-                <form labelId="search.form.label.cm_content" descriptionId="search.form.desc.cm_content">cm:content
-                </form>
-                <form labelId="search.form.label.cm_folder" descriptionId="search.form.desc.cm_folder">cm:folder</form>
+                <!-- Conserva cm:content para búsquedas generales -->
+                <form labelId="search.form.label.cm_content"
+                      descriptionId="search.form.desc.cm_content">cm:content</form>
 
-                <!-- Custom type -->
-                <form labelId="form.label.advancedsearch.acmeDocument"
-                      descriptionId="form.description.advancedsearch.acmeDocument">acme:document
-                </form>
+                <!-- Formularios de búsqueda para tipos CxP -->
+<!--                <form labelId="search.form.label.redsis_factura"-->
+<!--                      descriptionId="search.form.desc.redsis_factura">redsis:factura</form>-->
+
+<!--                <form labelId="search.form.label.redsis_soporte"-->
+<!--                      descriptionId="search.form.desc.redsis_soporte">redsis:soporte</form>-->
+
+<!--                <form labelId="search.form.label.redsis_notaCredito"-->
+<!--                      descriptionId="search.form.desc.redsis_notaCredito">redsis:notaCredito</form>-->
+
+<!--                <form labelId="search.form.label.redsis_notaDebito"-->
+<!--                      descriptionId="search.form.desc.redsis_notaDebito">redsis:notaDebito</form>-->
             </forms>
         </advanced-search>
     </config>
@@ -69,352 +129,345 @@
 
     <!-- __________________________________ acme:document base type _________________________________________________-->
 
-    <!-- View and Edit forms for acme:document -->
-    <config evaluator="node-type" condition="acme:document">
-        <forms>
-            <!-- Default form configuration for the cm:content type -->
-            <form>
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="cm:title" force="true"/>
-                    <show id="cm:description" force="true"/>
-                    <show id="mimetype"/>
-                    <show id="cm:author" force="true"/>
-                    <show id="size" for-mode="view"/>
-                    <show id="cm:creator" for-mode="view"/>
-                    <show id="cm:created" for-mode="view"/>
-                    <show id="cm:modifier" for-mode="view"/>
-                    <show id="cm:modified" for-mode="view"/>
+    <!-- ===================================================================== -->
+    <!-- FACTURA: View/Edit/Create + DocLib simple + Inline                    -->
+    <!-- ===================================================================== -->
 
-                    <!-- tags and categories -->
-                    <show id="cm:taggable" for-mode="edit" force="true"/>
-                    <show id="cm:categories"/>
+<!--    &lt;!&ndash; View/Edit por tipo de nodo &ndash;&gt;-->
+<!--    <config evaluator="node-type" condition="redsis:factura">-->
+<!--        <forms>-->
 
-                    <!-- cm:dublincore aspect -->
-                    <show id="cm:publisher"/>
-                    <show id="cm:contributor"/>
-                    <show id="cm:type"/>
-                    <show id="cm:identifier"/>
-                    <show id="cm:dcsource"/>
-                    <show id="cm:coverage"/>
-                    <show id="cm:rights"/>
-                    <show id="cm:subject"/>
+<!--            &lt;!&ndash; Form principal (view/edit/create) &ndash;&gt;-->
+<!--            <form>-->
+<!--                <field-visibility>-->
+<!--                    &lt;!&ndash; estándar &ndash;&gt;-->
+<!--                    <show id="cm:name" />-->
 
-                    <!-- cm:complianceable aspect -->
-                    <show id="cm:removeAfter"/>
+<!--                    &lt;!&ndash; base papelesdigitales &ndash;&gt;-->
+<!--                    <show id="redsis:tipoDocumentoCXP" />-->
+<!--                    <show id="redsis:estadoDocumentoCXP" />-->
+<!--                    <show id="redsis:fechaRegistro" />-->
+<!--                    <show id="redsis:empresaCodigo" />-->
+<!--                    <show id="redsis:centroCosto" />-->
+<!--                    <show id="redsis:nitProveedor" />-->
+<!--                    <show id="redsis:nombreProveedor" />-->
+<!--                    <show id="redsis:referenciaProveedor" />-->
+<!--                    <show id="redsis:moneda" />-->
+<!--                    <show id="redsis:observaciones" />-->
 
-                    <!-- cm:effectivity aspect -->
-                    <show id="cm:from"/>
-                    <show id="cm:to"/>
+<!--                    &lt;!&ndash; específicos de factura &ndash;&gt;-->
+<!--                    <show id="redsis:numeroFactura" />-->
+<!--                    <show id="redsis:fechaFactura" />-->
+<!--                    <show id="redsis:fechaVencimiento" />-->
+<!--                    <show id="redsis:periodoContable" />-->
+<!--                    <show id="redsis:numeroOrdenCompra" />-->
+<!--                    <show id="redsis:valorSubtotal" />-->
+<!--                    <show id="redsis:valorImpuestos" />-->
+<!--                    <show id="redsis:valorDescuentos" />-->
+<!--                    <show id="redsis:valorTotal" />-->
+<!--                </field-visibility>-->
 
-                    <!--  cm:summarizable aspect -->
-                    <show id="cm:summary"/>
+<!--                <appearance>-->
+<!--                    &lt;!&ndash; Sets de agrupación &ndash;&gt;-->
+<!--                    <set id="redsis_factura_set_doc"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_factura.documento"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-                    <!-- cm:translatable aspect -->
-                    <show id="cm:translations"/>
+<!--                    <set id="redsis_factura_set_prov"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_factura.proveedor"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-                    <!-- cm:localizable aspect -->
-                    <show id="cm:locale"/>
+<!--                    <set id="redsis_factura_set_cont"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_factura.contable"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-                    <!-- cm:ownable aspect -->
-                    <show id="cm:owner"/>
+<!--                    <set id="redsis_factura_set_val"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_factura.valores"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-                    <!-- cm:attachable aspect -->
-                    <show id="cm:attachments"/>
+<!--                    &lt;!&ndash; Asignación de campos &ndash;&gt;-->
 
-                    <!-- cm:emailed aspect -->
-                    <show id="cm:originator"/>
-                    <show id="cm:addressee"/>
-                    <show id="cm:addressees"/>
-                    <show id="cm:sentdate"/>
-                    <show id="cm:subjectline"/>
+<!--                    &lt;!&ndash; Documento &ndash;&gt;-->
+<!--                    <field id="cm:name" set="redsis_factura_set_doc" />-->
+<!--                    <field id="redsis:tipoDocumentoCXP" set="redsis_factura_set_doc" />-->
+<!--                    <field id="redsis:estadoDocumentoCXP" set="redsis_factura_set_doc" />-->
+<!--                    <field id="redsis:fechaRegistro" set="redsis_factura_set_doc" />-->
+<!--                    <field id="redsis:periodoContable" set="redsis_factura_set_doc" />-->
 
-                    <!-- exif:exif aspect -->
-                    <show id="exif:dateTimeOriginal"/>
-                    <show id="exif:pixelXDimension"/>
-                    <show id="exif:pixelYDimension"/>
-                    <show id="exif:exposureTime"/>
-                    <show id="exif:fNumber"/>
-                    <show id="exif:flash"/>
-                    <show id="exif:focalLength"/>
-                    <show id="exif:isoSpeedRatings"/>
-                    <show id="exif:manufacturer"/>
-                    <show id="exif:model"/>
-                    <show id="exif:software"/>
-                    <show id="exif:orientation"/>
-                    <show id="exif:xResolution"/>
-                    <show id="exif:yResolution"/>
-                    <show id="exif:resolutionUnit"/>
+<!--                    &lt;!&ndash; Proveedor &ndash;&gt;-->
+<!--                    <field id="redsis:nitProveedor" set="redsis_factura_set_prov" />-->
+<!--                    <field id="redsis:nombreProveedor" set="redsis_factura_set_prov" />-->
+<!--                    <field id="redsis:referenciaProveedor" set="redsis_factura_set_prov" />-->
 
-                    <!-- audio:audio aspect -->
-                    <show id="audio:album"/>
-                    <show id="audio:artist"/>
-                    <show id="audio:composer"/>
-                    <show id="audio:engineer"/>
-                    <show id="audio:genre"/>
-                    <show id="audio:trackNumber"/>
-                    <show id="audio:releaseDate"/>
-                    <show id="audio:sampleRate"/>
-                    <show id="audio:sampleType"/>
-                    <show id="audio:channelType"/>
-                    <show id="audio:compressor"/>
+<!--                    &lt;!&ndash; Contable &ndash;&gt;-->
+<!--                    <field id="redsis:empresaCodigo" set="redsis_factura_set_cont" />-->
+<!--                    <field id="redsis:centroCosto" set="redsis_factura_set_cont" />-->
+<!--                    <field id="redsis:moneda" set="redsis_factura_set_cont" />-->
+<!--                    <field id="redsis:observaciones" set="redsis_factura_set_cont" />-->
 
-                    <!-- cm:indexControl aspect -->
-                    <show id="cm:isIndexed"/>
-                    <show id="cm:isContentIndexed"/>
+<!--                    &lt;!&ndash; Valores / factura &ndash;&gt;-->
+<!--                    <field id="redsis:numeroFactura" set="redsis_factura_set_val" />-->
+<!--                    <field id="redsis:fechaFactura" set="redsis_factura_set_val" />-->
+<!--                    <field id="redsis:fechaVencimiento" set="redsis_factura_set_val" />-->
+<!--                    <field id="redsis:numeroOrdenCompra" set="redsis_factura_set_val" />-->
+<!--                    <field id="redsis:valorSubtotal" set="redsis_factura_set_val" />-->
+<!--                    <field id="redsis:valorImpuestos" set="redsis_factura_set_val" />-->
+<!--                    <field id="redsis:valorDescuentos" set="redsis_factura_set_val" />-->
+<!--                    <field id="redsis:valorTotal" set="redsis_factura_set_val" />-->
+<!--                </appearance>-->
+<!--            </form>-->
 
-                    <!-- cm:geographic aspect -->
-                    <show id="cm:latitude"/>
-                    <show id="cm:longitude"/>
+<!--            &lt;!&ndash; DocLib: edición rápida (popup) &ndash;&gt;-->
+<!--            <form id="doclib-simple-metadata">-->
+<!--                <field-visibility>-->
+<!--                    <show id="cm:name" />-->
+<!--                    <show id="redsis:tipoDocumentoCXP" />-->
+<!--                    <show id="redsis:estadoDocumentoCXP" />-->
+<!--                    <show id="redsis:fechaRegistro" />-->
+<!--                    <show id="redsis:empresaCodigo" />-->
+<!--                    <show id="redsis:centroCosto" />-->
+<!--                    <show id="redsis:nitProveedor" />-->
+<!--                    <show id="redsis:nombreProveedor" />-->
+<!--                    <show id="redsis:referenciaProveedor" />-->
+<!--                    <show id="redsis:moneda" />-->
+<!--                    <show id="redsis:numeroFactura" />-->
+<!--                    <show id="redsis:fechaFactura" />-->
+<!--                    <show id="redsis:fechaVencimiento" />-->
+<!--                    <show id="redsis:valorTotal" />-->
+<!--                </field-visibility>-->
+<!--                <edit-form template="../documentlibrary/forms/doclib-simple-metadata.ftl"/>-->
+<!--                <appearance>-->
+<!--                    <set id="redsis_factura_simple_set"-->
+<!--                         appearance="whitespace"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl"-->
+<!--                         label-id="form.set.redsis_factura.simple" />-->
 
-                    <!-- surf:widget aspect -->
-                    <show id="surf:widgetType"/>
-                    <show id="surf:mid"/>
-                    <show id="surf:label"/>
+<!--                    <field id="cm:name" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:tipoDocumentoCXP" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:estadoDocumentoCXP" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:fechaRegistro" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:empresaCodigo" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:centroCosto" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:nitProveedor" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:nombreProveedor" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:referenciaProveedor" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:moneda" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:numeroFactura" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:fechaFactura" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:fechaVencimiento" set="redsis_factura_simple_set" />-->
+<!--                    <field id="redsis:valorTotal" set="redsis_factura_simple_set" />-->
+<!--                </appearance>-->
+<!--            </form>-->
 
-                    <!-- ACME custom props -->
-                    <show id="acme:documentId" force="true"/>
-                    <show id="acme:securityClassification"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:name">
-                        <control>
-                            <control-param name="maxLength">255</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:title">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="cm:description">
-                        <control>
-                            <control-param name="activateLinks">true</control-param>
-                        </control>
-                    </field>
+<!--            &lt;!&ndash; DocLib: inline edit &ndash;&gt;-->
+<!--            <form id="doclib-inline-edit">-->
+<!--                <field-visibility>-->
+<!--                    <show id="cm:name" />-->
+<!--                    <show id="redsis:tipoDocumentoCXP" />-->
+<!--                    <show id="redsis:estadoDocumentoCXP" />-->
+<!--                    <show id="redsis:fechaRegistro" />-->
+<!--                    <show id="redsis:empresaCodigo" />-->
+<!--                    <show id="redsis:centroCosto" />-->
+<!--                    <show id="redsis:nitProveedor" />-->
+<!--                    <show id="redsis:nombreProveedor" />-->
+<!--                    <show id="redsis:numeroFactura" />-->
+<!--                    <show id="redsis:fechaFactura" />-->
+<!--                    <show id="redsis:fechaVencimiento" />-->
+<!--                    <show id="redsis:valorTotal" />-->
+<!--                </field-visibility>-->
+<!--                <appearance>-->
+<!--                    <set id="redsis_factura_inline_set"-->
+<!--                         appearance="whitespace"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl"-->
+<!--                         label-id="form.set.redsis_factura.inline" />-->
 
-                    <set id="cm:content2cols" template="/org/alfresco/components/form/2-column-set.ftl"/>
+<!--                    <field id="cm:name" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:tipoDocumentoCXP" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:estadoDocumentoCXP" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:fechaRegistro" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:empresaCodigo" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:centroCosto" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:nitProveedor" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:nombreProveedor" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:numeroFactura" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:fechaFactura" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:fechaVencimiento" set="redsis_factura_inline_set" />-->
+<!--                    <field id="redsis:valorTotal" set="redsis_factura_inline_set" />-->
+<!--                </appearance>-->
+<!--            </form>-->
 
-                    <field set="cm:content2cols" id="mimetype">
-                        <control template="/org/alfresco/components/form/controls/mimetype.ftl"/>
-                    </field>
+<!--        </forms>-->
+<!--    </config>-->
 
-                    <field set="cm:content2cols" id="size">
-                        <control template="/org/alfresco/components/form/controls/size.ftl"/>
-                    </field>
-                    <field set="cm:content2cols" id="cm:creator"/>
-                    <field set="cm:content2cols" id="cm:created"/>
-                    <field set="cm:content2cols" id="cm:modifier"/>
-                    <field set="cm:content2cols" id="cm:modified"/>
+<!--    &lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--    &lt;!&ndash; SOPORTE: formulario más simple (view/edit)                            &ndash;&gt;-->
+<!--    &lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--    <config evaluator="node-type" condition="redsis:soporte">-->
+<!--        <forms>-->
+<!--            <form>-->
+<!--                <field-visibility>-->
+<!--                    <show id="cm:name" />-->
+<!--                    <show id="redsis:tipoDocumentoCXP" />-->
+<!--                    <show id="redsis:estadoDocumentoCXP" />-->
+<!--                    <show id="redsis:fechaRegistro" />-->
+<!--                    <show id="redsis:empresaCodigo" />-->
+<!--                    <show id="redsis:centroCosto" />-->
+<!--                    <show id="redsis:nitProveedor" />-->
+<!--                    <show id="redsis:nombreProveedor" />-->
+<!--                    <show id="redsis:referenciaProveedor" />-->
+<!--                    <show id="redsis:moneda" />-->
+<!--                    <show id="redsis:observaciones" />-->
+<!--                    <show id="redsis:tipoSoporte" />-->
+<!--                    <show id="redsis:numeroDocumentoSoporte" />-->
+<!--                    <show id="redsis:fechaSoporte" />-->
+<!--                    <show id="redsis:valorSoporte" />-->
+<!--                    <show id="redsis:descripcionSoporte" />-->
+<!--                </field-visibility>-->
+<!--                <appearance>-->
+<!--                    <set id="redsis_soporte_set_doc"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_soporte.documento"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-                    <field id="cm:taggable">
-                        <control>
-                            <control-param name="compactMode">true</control-param>
-                            <control-param name="params">aspect=cm:taggable</control-param>
-                            <control-param name="createNewItemUri">/api/tag/workspace/SpacesStore</control-param>
-                            <control-param name="createNewItemIcon">tag</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:categories">
-                        <control>
-                            <control-param name="compactMode">true</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:originator" read-only="true"/>
-                    <field id="cm:addressee" read-only="true"/>
-                    <field id="cm:addressees" read-only="true"/>
-                    <field id="cm:sentdate" read-only="true"/>
-                    <field id="cm:subjectline" read-only="true"/>
+<!--                    <set id="redsis_soporte_set_soporte"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_soporte.soporte"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-                    <!-- ACME Props appearance -->
-                    <set id="acmeDocSet" appearance="bordered-panel" label-id="form.set.label.acme.document"/>
-                    <field id="acme:documentId" label-id="form.field.label.acme.documentId" set="acmeDocSet">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="acme:securityClassification" label-id="form.field.label.acme.securityClassification"
-                           set="acmeDocSet"/>
-                </appearance>
-            </form>
+<!--                    <field id="cm:name" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:tipoDocumentoCXP" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:estadoDocumentoCXP" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:fechaRegistro" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:empresaCodigo" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:centroCosto" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:nitProveedor" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:nombreProveedor" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:referenciaProveedor" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:moneda" set="redsis_soporte_set_doc" />-->
+<!--                    <field id="redsis:observaciones" set="redsis_soporte_set_doc" />-->
 
-            <!-- Document Library pop-up Edit Metadata form -->
-            <form id="doclib-simple-metadata">
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="cm:title" force="true"/>
-                    <show id="cm:description" force="true"/>
-                    <!-- tags and categories -->
-                    <show id="cm:taggable" for-mode="edit" force="true"/>
-                    <show id="cm:categories"/>
+<!--                    <field id="redsis:tipoSoporte" set="redsis_soporte_set_soporte" />-->
+<!--                    <field id="redsis:numeroDocumentoSoporte" set="redsis_soporte_set_soporte" />-->
+<!--                    <field id="redsis:fechaSoporte" set="redsis_soporte_set_soporte" />-->
+<!--                    <field id="redsis:valorSoporte" set="redsis_soporte_set_soporte" />-->
+<!--                    <field id="redsis:descripcionSoporte" set="redsis_soporte_set_soporte" />-->
+<!--                </appearance>-->
+<!--            </form>-->
+<!--        </forms>-->
+<!--    </config>-->
 
-                    <!-- ACME custom props -->
-                    <show id="acme:documentId" force="true"/>
-                    <show id="acme:securityClassification"/>
-                </field-visibility>
-                <edit-form template="../documentlibrary/forms/doclib-simple-metadata.ftl"/>
-                <appearance>
-                    <field id="cm:name">
-                        <control>
-                            <control-param name="maxLength">255</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:title">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="cm:description">
-                        <control>
-                            <control-param name="activateLinks">true</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:taggable">
-                        <control>
-                            <control-param name="compactMode">true</control-param>
-                            <control-param name="params">aspect=cm:taggable</control-param>
-                            <control-param name="createNewItemUri">/api/tag/workspace/SpacesStore</control-param>
-                            <control-param name="createNewItemIcon">tag</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:categories">
-                        <control>
-                            <control-param name="compactMode">true</control-param>
-                        </control>
-                    </field>
+<!--    &lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--    &lt;!&ndash; NOTA CRÉDITO                                                          &ndash;&gt;-->
+<!--    &lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--    <config evaluator="node-type" condition="redsis:notaCredito">-->
+<!--        <forms>-->
+<!--            <form>-->
+<!--                <field-visibility>-->
+<!--                    <show id="cm:name" />-->
+<!--                    <show id="redsis:tipoDocumentoCXP" />-->
+<!--                    <show id="redsis:estadoDocumentoCXP" />-->
+<!--                    <show id="redsis:fechaRegistro" />-->
+<!--                    <show id="redsis:empresaCodigo" />-->
+<!--                    <show id="redsis:centroCosto" />-->
+<!--                    <show id="redsis:nitProveedor" />-->
+<!--                    <show id="redsis:nombreProveedor" />-->
+<!--                    <show id="redsis:referenciaProveedor" />-->
+<!--                    <show id="redsis:moneda" />-->
+<!--                    <show id="redsis:observaciones" />-->
+<!--                    <show id="redsis:numeroNotaCredito" />-->
+<!--                    <show id="redsis:fechaNotaCredito" />-->
+<!--                    <show id="redsis:valorNotaCredito" />-->
+<!--                    <show id="redsis:motivoNotaCredito" />-->
+<!--                </field-visibility>-->
+<!--                <appearance>-->
+<!--                    <set id="redsis_notaCredito_set_doc"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_notaCredito.documento"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-                    <!-- ACME Props appearance -->
-                    <set id="acmeDocSet" appearance="bordered-panel" label-id="form.set.label.acme.document"/>
-                    <field id="acme:documentId" label-id="form.field.label.acme.documentId" set="acmeDocSet">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="acme:securityClassification" label-id="form.field.label.acme.securityClassification"
-                           set="acmeDocSet"/>
-                </appearance>
-            </form>
+<!--                    <set id="redsis_notaCredito_set_nc"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_notaCredito.nota"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-            <!-- Document Library Inline Edit form -->
-            <form id="doclib-inline-edit">
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="cm:content" force="true"/>
-                    <show id="cm:title" force="true"/>
-                    <show id="cm:description" force="true"/>
+<!--                    <field id="cm:name" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:tipoDocumentoCXP" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:estadoDocumentoCXP" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:fechaRegistro" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:empresaCodigo" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:centroCosto" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:nitProveedor" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:nombreProveedor" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:referenciaProveedor" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:moneda" set="redsis_notaCredito_set_doc" />-->
+<!--                    <field id="redsis:observaciones" set="redsis_notaCredito_set_doc" />-->
 
-                    <!-- ACME custom props -->
-                    <show id="acme:documentId" force="true"/>
-                    <show id="acme:securityClassification"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:name">
-                        <control>
-                            <control-param name="maxLength">255</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:title">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="cm:content" label-id="">
-                        <control>
-                            <control-param name="editorAppearance">explorer</control-param>
-                            <control-param name="forceEditor">true</control-param>
-                        </control>
-                    </field>
+<!--                    <field id="redsis:numeroNotaCredito" set="redsis_notaCredito_set_nc" />-->
+<!--                    <field id="redsis:fechaNotaCredito" set="redsis_notaCredito_set_nc" />-->
+<!--                    <field id="redsis:valorNotaCredito" set="redsis_notaCredito_set_nc" />-->
+<!--                    <field id="redsis:motivoNotaCredito" set="redsis_notaCredito_set_nc" />-->
+<!--                </appearance>-->
+<!--            </form>-->
+<!--        </forms>-->
+<!--    </config>-->
 
-                    <!-- ACME Props appearance -->
-                    <set id="acmeDocSet" appearance="bordered-panel" label-id="form.set.label.acme.document"/>
-                    <field id="acme:documentId" label-id="form.field.label.acme.documentId" set="acmeDocSet">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="acme:securityClassification" label-id="form.field.label.acme.securityClassification"
-                           set="acmeDocSet"/>
-                </appearance>
-            </form>
-        </forms>
-    </config>
+<!--    &lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--    &lt;!&ndash; NOTA DÉBITO                                                           &ndash;&gt;-->
+<!--    &lt;!&ndash; ===================================================================== &ndash;&gt;-->
+<!--    <config evaluator="node-type" condition="redsis:notaDebito">-->
+<!--        <forms>-->
+<!--            <form>-->
+<!--                <field-visibility>-->
+<!--                    <show id="cm:name" />-->
+<!--                    <show id="redsis:tipoDocumentoCXP" />-->
+<!--                    <show id="redsis:estadoDocumentoCXP" />-->
+<!--                    <show id="redsis:fechaRegistro" />-->
+<!--                    <show id="redsis:empresaCodigo" />-->
+<!--                    <show id="redsis:centroCosto" />-->
+<!--                    <show id="redsis:nitProveedor" />-->
+<!--                    <show id="redsis:nombreProveedor" />-->
+<!--                    <show id="redsis:referenciaProveedor" />-->
+<!--                    <show id="redsis:moneda" />-->
+<!--                    <show id="redsis:observaciones" />-->
+<!--                    <show id="redsis:numeroNotaDebito" />-->
+<!--                    <show id="redsis:fechaNotaDebito" />-->
+<!--                    <show id="redsis:valorNotaDebito" />-->
+<!--                    <show id="redsis:motivoNotaDebito" />-->
+<!--                </field-visibility>-->
+<!--                <appearance>-->
+<!--                    <set id="redsis_notaDebito_set_doc"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_notaDebito.documento"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-    <!-- Create and search forms for acme:document -->
-    <config evaluator="model-type" condition="acme:document">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="cm:content" force="true"/>
-                    <show id="cm:title" force="true"/>
-                    <show id="cm:description" force="true"/>
-                    <show id="mimetype"/>
-                    <show id="app:editInline" force="true"/>
+<!--                    <set id="redsis_notaDebito_set_nd"-->
+<!--                         appearance="bordered-panel"-->
+<!--                         label-id="form.set.redsis_notaDebito.nota"-->
+<!--                         template="/org/alfresco/components/form/2-column-set.ftl" />-->
 
-                    <!-- ACME custom props -->
-                    <show id="acme:documentId" force="true"/>
-                    <show id="acme:securityClassification"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:name">
-                        <control>
-                            <control-param name="maxLength">255</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:title">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="cm:content" label-id="">
-                        <control>
-                            <control-param name="editorAppearance">explorer</control-param>
-                        </control>
-                    </field>
-                    <field id="mimetype">
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl">
-                            <control-param name="contextProperty">mimeType</control-param>
-                        </control>
-                    </field>
-                    <field id="app:editInline">
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl">
-                            <control-param name="contextProperty">editInline</control-param>
-                        </control>
-                    </field>
+<!--                    <field id="cm:name" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:tipoDocumentoCXP" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:estadoDocumentoCXP" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:fechaRegistro" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:empresaCodigo" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:centroCosto" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:nitProveedor" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:nombreProveedor" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:referenciaProveedor" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:moneda" set="redsis_notaDebito_set_doc" />-->
+<!--                    <field id="redsis:observaciones" set="redsis_notaDebito_set_doc" />-->
 
-                    <!-- ACME Props appearance -->
-                    <set id="acmeDocSet" appearance="bordered-panel" label-id="form.set.label.acme.document"/>
-                    <field id="acme:documentId" label-id="form.field.label.acme.documentId" set="acmeDocSet">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="acme:securityClassification" label-id="form.field.label.acme.securityClassification"
-                           set="acmeDocSet"/>
-                </appearance>
-            </form>
-            <!-- Search form -->
-            <form id="search">
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="cm:title" force="true"/>
-                    <show id="cm:description" force="true"/>
-                    <show id="mimetype"/>
-                    <show id="cm:modified"/>
-                    <show id="cm:modifier"/>
-
-                    <!-- ACME custom props -->
-                    <show id="acme:documentId" force="true"/>
-                    <show id="acme:securityClassification"/>
-                </field-visibility>
-                <appearance>
-                    <field id="mimetype">
-                        <control template="/org/alfresco/components/form/controls/mimetype.ftl"/>
-                    </field>
-                    <field id="cm:modifier">
-                        <control>
-                            <control-param name="forceEditable">true</control-param>
-                        </control>
-                    </field>
-                    <field id="cm:modified">
-                        <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
-                    </field>
-
-                    <!-- ACME Props appearance -->
-                    <set id="acmeDocSet" appearance="bordered-panel" label-id="form.set.label.acme.document"/>
-                    <field id="acme:documentId" label-id="form.field.label.acme.documentId" set="acmeDocSet">
-                        <control template="/org/alfresco/components/form/controls/textfield.ftl"/>
-                    </field>
-                    <field id="acme:securityClassification" label-id="form.field.label.acme.securityClassification"
-                           set="acmeDocSet"/>
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
+<!--                    <field id="redsis:numeroNotaDebito" set="redsis_notaDebito_set_nd" />-->
+<!--                    <field id="redsis:fechaNotaDebito" set="redsis_notaDebito_set_nd" />-->
+<!--                    <field id="redsis:valorNotaDebito" set="redsis_notaDebito_set_nd" />-->
+<!--                    <field id="redsis:motivoNotaDebito" set="redsis_notaDebito_set_nd" />-->
+<!--                </appearance>-->
+<!--            </form>-->
+<!--        </forms>-->
+<!--    </config>-->
 
 </alfresco-config>

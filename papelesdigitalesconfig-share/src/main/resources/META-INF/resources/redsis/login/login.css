@@ -1,0 +1,150 @@
+/* =========================================================
+   Papeles Digitales — Login (standalone)
+   - Aislado bajo .pd-login-page
+   - Sin dependencias del tema
+   - Tokens compatibles con el resto del proyecto
+   ========================================================= */
+
+/* 00) TOKENS */
+.pd-login-page {
+  --pd-primary: #0F4C81;
+  --pd-primary-600: #0E3F6C;
+  --pd-primary-700: #0B3456;
+  --pd-on-primary: #FFFFFF;
+
+  --pd-accent: #17A2B8;
+  --pd-bg: #F7F9FC;
+  --pd-surface: #FFFFFF;
+  --pd-border: #E5E7EB;
+  --pd-text: #293241;
+  --pd-muted: #6B7280;
+
+  --pd-radius: 12px;
+  --pd-gap: 14px;
+
+  --pd-shadow-sm: 0 1px 2px rgba(0,0,0,.06);
+  --pd-shadow-lg: 0 8px 28px rgba(15,76,129,.18);
+}
+.pd-login-page {
+  --pd-logo-h: 110px;           /* tamaño base */
+}
+
+@media (min-width: 480px) {
+  .pd-login-page { --pd-logo-h: 120px; }
+}
+@media (min-width: 768px) {
+  .pd-login-page { --pd-logo-h: 220px; }
+}
+
+/* 01) BASE (scopeado) */
+.pd-login-page, .pd-login-page * { box-sizing: border-box; }
+.pd-login-page {
+  min-height: 100vh;
+  margin: 0;
+  font: 14px/1.5 "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--pd-text);
+
+  /* Fondo moderno y suave */
+  background:
+    radial-gradient(1200px 600px at -10% -20%, rgba(23,162,184,.08), transparent 60%),
+    radial-gradient(1000px 500px at 110% 120%, rgba(15,76,129,.10), transparent 60%),
+    var(--pd-bg);
+}
+
+/* 02) LAYOUT */
+.pd-login-wrap {
+  max-width: 420px; width: 92vw;
+  margin: 8vh auto; padding: 28px;
+  background: var(--pd-surface);
+  border: 1px solid var(--pd-border);
+  border-radius: var(--pd-radius);
+  box-shadow: var(--pd-shadow-lg);
+}
+
+.pd-logo {
+  height: var(--pd-logo-h);
+  background-size: auto 100%;
+  background: url("/share/res/redsis/images/papeles-digitales-logo.svg") center/contain no-repeat;
+}
+.pd-brand {
+  display: none; /* Accesible sólo para lectores */
+}
+
+.pd-title {
+  font-size: 22px; font-weight: 700;
+  margin: 8px 0 18px; color: var(--pd-text);
+}
+
+/* 03) FORM */
+.pd-field { margin-bottom: var(--pd-gap); }
+.pd-label {
+  display: inline-block; margin-bottom: 6px;
+  color: var(--pd-muted); font-weight: 600; font-size: 13px;
+}
+
+.pd-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--pd-border);
+  border-radius: 10px;
+  background: var(--pd-surface);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s, background-color .15s;
+}
+.pd-input::placeholder { color: #9AA3AF; }
+.pd-input:focus {
+  border-color: var(--pd-primary);
+  box-shadow: 0 0 0 3px rgba(15,76,129,.14);
+}
+
+/* Estados de error */
+.pd-field.is-error .pd-input { border-color: #D92D20; }
+.pd-help { font-size: 12px; color: var(--pd-muted); margin-top: 6px; }
+.pd-help.error { color: #D92D20; }
+
+/* 04) BOTONES */
+.pd-btn {
+  display: inline-block; width: 100%; height: 42px;
+  border: 0; border-radius: 10px; cursor: pointer;
+  background: var(--pd-primary); color: var(--pd-on-primary);
+  font-weight: 700; letter-spacing: .2px;
+  transition: transform .04s ease, filter .15s ease, background-color .15s ease;
+}
+.pd-btn:hover { filter: brightness(1.05); }
+.pd-btn:active { transform: translateY(1px); }
+.pd-btn:focus-visible { outline: 3px solid rgba(23,162,184,.35); outline-offset: 2px; }
+
+.pd-actions {
+  margin-top: 10px; display: flex; justify-content: space-between; gap: 10px;
+}
+.pd-link {
+  font-size: 13px; color: var(--pd-accent); text-decoration: none;
+}
+.pd-link:hover { text-decoration: underline; }
+
+/* 05) FOOTER */
+.pd-foot {
+  margin-top: 16px; text-align: center;
+  font-size: 12px; color: var(--pd-muted);
+}
+
+/* 06) RESPONSIVE */
+@media (max-width: 380px) {
+  .pd-login-wrap { padding: 22px; border-radius: 10px; }
+  .pd-title { font-size: 20px; }
+}
+
+/* 07) MODO OSCURO (opcional por sistema) */
+@media (prefers-color-scheme: dark) {
+  .pd-login-page {
+    --pd-bg: #0F172A;
+    --pd-surface: #0B1223;
+    --pd-border: #1E293B;
+    --pd-text: #E5E7EB;
+    --pd-muted: #9CA3AF;
+    --pd-shadow-lg: 0 8px 28px rgba(0,0,0,.55);
+  }
+  .pd-input { background: #0F172A; border-color: #1E293B; color: var(--pd-text); }
+  .pd-input::placeholder { color: #6B7280; }
+  .pd-login-wrap { background: var(--pd-surface); border-color: var(--pd-border); }
+}

@@ -1,0 +1,4 @@
+<page>
+    <template-instance>redsis-login</template-instance>
+    <authentication>none</authentication>
+</page>
